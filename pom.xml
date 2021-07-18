@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.jasonc</groupId>
+    <artifactId>blog</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>blog</name>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+        <!--mybatisplus代码生成-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.6</version>
+        </dependency>
+        <!--shiro登录认证和授权-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <!-- redis连接池 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!-- 使用Jackson做序列化和反序列化 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
+
+        <!--commonmark: 将MarkDawn转化Html的解析器-->
+        <!-- 核心 -->
+        <dependency>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark-ext-heading-anchor</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+        <!--表格-->
+        <dependency>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark-ext-gfm-tables</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+        <!--        表格-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-gfm-tables</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--        url格式的文本转成链接-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-autolink</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--删除线插件-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-gfm-strikethrough</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--图片解析插件-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-image-attributes</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;        图片解析插件&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-heading-anchor</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;        下划线解析插件&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-ins</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;        任务列表解析插件&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-task-list-items</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;        YAML格式数据解析插件&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>com.atlassian.commonmark</groupId>-->
+        <!--    <artifactId>commonmark-ext-yaml-front-matter</artifactId>-->
+        <!--    <version>0.15.0</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

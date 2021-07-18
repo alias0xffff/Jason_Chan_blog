@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">博客详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+    <link rel="stylesheet" href="../static/css/jquery.emoji.css" th:href="@{/css/jquery.emoji.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?6b1eb02bacb648d682681dc81149e144";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    <style>
+        .myHideStyle {
+            display: none !important;
+        }
+
+        .myShowStyle {
+            display: inline-block !important;
+        }
+    </style>
+</head>
+<body>
+
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small "
+     style="z-index: 99 !important">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <!--引入天气预报插件-->
+            <div id="he-plugin-simple"></div>
+            <h2 class="ui m-light-blue header item" title="个人博客">JC_Blog</h2>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide "
+               th:classappend="${n==1} ? 'active'"> <i class="mini home icon"></i>&nbsp;首页</a>
+            <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"
+               th:classappend="${n==2} ? 'active'"> <i class="mini idea icon"></i>分类</a>
+            <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
+               th:classappend="${n==3} ? 'active'"> <i class="mini tags icon"></i>&nbsp;标签</a>
+            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"
+               th:classappend="${n==4} ? 'active'"> <i class="mini clone icon"></i>&nbsp;归档</a>
+            <!--            <a href="#" th:href="@{/messages}"  class="m-item item m-mobile-hide"-->
+            <!--               th:classappend="${n==5} ? 'active'"> <i class="mini envelope outline icon"></i>&nbsp;留言</a>-->
+            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide"
+               th:classappend="${n==5} ? 'active'"><i class="mini info icon"></i>关于我</a>
+
+            <!--      <a href="http://music.jason_chan.icu" class="m-item item m-mobile-hide" th:classappend="${n==7} ? 'active'">&nbsp;<i class="mini music icon"></i>&nbsp;在线音乐</a>-->
+            <!--      <a href="http://netdisk.jason_chan.icu" class="m-item item m-mobile-hide" th:classappend="${n==8} ? 'active'">&nbsp;<i class="mini save icon"></i>&nbsp;云盘</a>-->
+            <!--      <a href="#" target="_blank" th:href="@{/admin}" class="m-item item m-mobile-hide" th:classappend="${n==7} ? 'active'">&nbsp;<i class="mini user secret icon"></i>后台管理</a>
+                  <a href="#" target="_blank" th:href="@{/qq/oauth}" class="m-item item m-mobile-hide"><i class="mini qq icon">&nbsp;</i>QQ登录</a>-->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <div class="right m-item item m-mobile-hide ">
+                <form name="search" action="#" th:action="@{/search}" method="post">
+                    <div class="ui icon inverted transparent  input m-margin-tb-tiny">
+                        <input type="text" name="query" placeholder="Search...." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+
+            <div class="right m-item m-mobile-hide item">
+                <div th:classappend="${session.loginStatus}?'myHideStyle':'myShowStyle'">
+                    <a href="#" th:href="@{/qq/oauth}" style="width:80px; text-align:center"><i
+                            class="mini qq icon"></i>QQ登录&nbsp;|</a>
+                    <a href="#" th:href="@{/github/oauth}" style="width:80px; text-align:center"><i
+                            class="github icon"></i>github登录&nbsp;</a>
+                    <a href="#" th:href="@{/admin}" style="width:80px; text-align:center"><i
+                            class="mini user secret icon"></i>&nbsp;后台管理</a>
+                </div>
+
+                <div class="ui dropdown item" th:classappend="${session.loginStatus}?'myShowStyle':'myHideStyle'">
+                    <div class="text">
+                        <img class="ui avatar image" th:src="${session.avatar}">
+                        <span th:text="${session.nickname}">Jason Chan</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu" th:if="${session.loginType == 1}">
+                        <a href="#" th:href="@{/qqinfo}" class="item">QQ资料</a>
+                        <a href="#" th:href="@{/qqlogout}" class="item">退出登录</a>
+                    </div>
+                    <div class="menu" th:if="${session.loginType == 2}">
+                        <a href="#" th:href="@{/githubInfo}" class="item">Github资料</a>
+                        <a href="#" th:href="@{/githublogout}" class="item">退出登录</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+
+</nav>
+
+
+<!--底部footer-->
+<footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <!--    引入网易云音乐播放器插件-->
+    <!--        <div id="netEasy-music" style="display:block;position: absolute;top: 2px; right: 2px; bottom: 0px;right: 280px;width: 0%;z-index:99">-->
+    <!--            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1329665666&auto=1&height=66"></iframe>-->
+    <!--        </div>-->
+    <!--引入天气预报插件-->
+    <!--    <div id="he-plugin-simple"></div>-->
+    <script>
+        WIDGET = {
+            "CONFIG": {
+                "modules": "01234",
+                "background": "5",
+                "tmpColor": "FFFFFF",
+                "tmpSize": "16",
+                "cityColor": "FFFFFF",
+                "citySize": "16",
+                "aqiColor": "FFFFFF",
+                "aqiSize": "16",
+                "weatherIconSize": "24",
+                "alertIconSize": "18",
+                "padding": "10px 10px 10px 10px",
+                "shadow": "0",
+                "language": "auto",
+                "borderRadius": "5",
+                "fixed": "true",
+                "vertical": "top",
+                "horizontal": "left",
+                "left": "2",
+                "top": "10",
+                "key": "8b450fc89b04406aa1814bdd12aa6546"
+            }
+        }
+    </script>
+    <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <!--<img src="../static/images/wechat.jpg" th:src="@{/images/wechat.jpg}"  class="ui rounded image" alt="" style="width: 110px">-->
+                        <img src="../images/footer_image1.jpg" class="ui rounded image" alt=""
+                             style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">最新博客</h4>
+                <div id="newblog-container">
+                    <div class="ui inverted link list" th:fragment="newblogList">
+                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="item m-text-thin"
+                           th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
+                        <!--/*-->
+                        <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                        <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                        <!--*/-->
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin" th:text="#{index.email}">Email：jasonc9702@gmail.com</a>
+                    <a href="#" class="item m-text-thin" th:text="#{index.qq}">QQ：1797074043</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini" th:text="#{index.blogDescription}">
+                    这是我的个人博客、记录学习进度和关于编程、写作、思考相关的任何内容...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - <span
+                th:text="${#dates.year(#dates.createNow())}">2019</span> &nbsp;JC &nbsp; Designed by Jason Chan</p>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny"><a href="#">粤ICP备20000310号</a>
+        </p>
+
+        <div style="width:300px;margin:0 auto; padding:1px 0; ">
+            <a href="#"
+               style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img
+                    src="../images/1.png" th:src="@{/images/1.png}" style="float:left;"/>
+                <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#ff1c04;">粤公网安备
+                    36098102000000号</p></a>
+        </div>
+
+        <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+        <script>
+            var now = new Date();
+
+            function createtime() {
+                var grt = new Date("11/11/2020 17:38:00");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+                now.setTime(now.getTime() + 250);
+                days = (now - grt) / 1000 / 60 / 60 / 24;
+                dnum = Math.floor(days);
+                hours = (now - grt) / 1000 / 60 / 60 - (24 * dnum);
+                hnum = Math.floor(hours);
+                if (String(hnum).length == 1) {
+                    hnum = "0" + hnum;
+                }
+                minutes = (now - grt) / 1000 / 60 - (24 * 60 * dnum) - (60 * hnum);
+                mnum = Math.floor(minutes);
+                if (String(mnum).length == 1) {
+                    mnum = "0" + mnum;
+                }
+                seconds = (now - grt) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+                snum = Math.round(seconds);
+                if (String(snum).length == 1) {
+                    snum = "0" + snum;
+                }
+                document.getElementById("timeDate").innerHTML = "本站已安全运行 " + dnum + " 天 ";
+                document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+            }
+
+            setInterval("createtime()", 500);
+        </script>
+
+    </div>
+
+</footer>
+
+<th:block th:fragment="script">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <div class="aplayer" data-id="6854402758" data-server="netease" data-type="playlist" data-fixed="true"
+         data-autoplay="true" data-volume="0.6" data-mutex="true" data-order="random" data-loop="all"></div>
+    <script src="http://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+    <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+    <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+    <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+    <script src="../static/lib/waypoints/jquery.waypoints.min.js"
+            th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+    <script src="../static/js/jquery.emoji.js" th:src="@{/js/jquery.emoji.js}"></script>
+    <script src="../static/js/emoji.list.js" th:src="@{/js/emoji.list.js}"></script>
+    <script>
+        $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+    </script>
+    <script>
+        $('.ui.dropdown').dropdown({
+            on: 'hover'
+        });
+    </script>
+    <!--适配移动端和电脑端-->
+    <script type="text/javascript">
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                return {     //移动终端浏览器版本信息
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    webApp: u.indexOf('Safari') == -1 //是否web应用程序，没有头部与底部
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+        if (browser.versions.mobile) {
+            //执行移动端的相关代码
+            //alert("移动端");
+            //设置移动端不显示网易云音乐插件
+            onload = function () {
+                var MusicDivShow = document.getElementById('netEasy-music');//获取指定div中的元素
+                MusicDivShow.style.display = 'none';//控制层隐藏
+            };
+        } else if (!browser.versions.mobile) { //非移动端，动态加载js和div
+            //设置电脑端显示网易云音乐插件
+            onload = function () {
+                var MusicDivShow = document.getElementById('netEasy-music');//获取指定div中的元素
+                MusicDivShow.style.display = 'block';//控制层显示
+            };
+
+            //设置电脑端显示天气插件
+            onload = function () {
+                var WeatherDivShow = document.getElementById('he-plugin-simple');//获取指定div中的元素
+                WeatherDivShow.style.display = 'block';//控制层显示
+            };
+
+            var script1 = document.createElement('script');
+            script1.type = 'text/javascript';
+            script1.src = '\\js\\snow.js';
+
+            <!-- 天气预报 -->
+            var script4 = document.createElement('script');
+            script4.type = 'text/javascript';
+            script4.src = 'https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0';
+
+            var script2 = document.createElement('script');
+            script2.type = 'text/javascript';
+            script2.src = '\\js\\click_show_text.js';
+
+            var script3 = document.createElement('script');
+            script3.type = 'text/javascript';
+            script3.color = '220,220,220';
+            script3.opacity = '0.7';//透明度
+            script3.zIndex = '-2';
+            script3.count = '200';
+            script3.src = '//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js';
+
+            /*live-2D*/
+            var script5 = document.createElement('script');
+            script5.type = 'text/javascript';
+            script5.src = '\\js\\autoload.js';
+
+            $('body').append(script5);
+            $('body').append(script1);
+            $('body').append(script4);
+            $('body').append(script2);
+            $('body').append(script3);
+        }
+    </script>
+    <!--博客美化效果-->
+    <!--单击显示文字-->
+    <!--  <script type="text/javascript" src="/js/click_show_text.js"></script>-->
+    <!--动态线条背景-->
+    <!--  <script type="text/javascript"
+              color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+      </script>-->
+    <!-- 雪花特效 -->
+    <!--<script type="text/javascript" src="\js\snow.js"></script>-->
+
+    <script type="text/javascript">
+
+        /*    window.onbeforeunload=function(e){
+        /!*      var e = window.event||e;
+              e.returnValue=("确定离开当前页面吗？");*!/
+              let currentTime = ap.audio.currentTime;
+              localStorage.setItem("musicTime",currentTime);
+              ap.pause();
+            }*/
+
+        // $(function () {
+        //     $(document).pjax(' a[data-pjax]', '#pjax-container', {
+        //         fragment: '#pjax-container',
+        //         timeout: 8000,
+        //         type: 'GET'
+        //     });
+        //
+        //     $(document).on('submit', 'form', function (event) {
+        //         //var container = $(this).closest('[pjax-container]');
+        //         $.pjax.submit(event, '#pjax-container', {
+        //             fragment: '#pjax-container', timeout: 8000
+        //         });
+        //     });
+        //
+        //     $(document).on('pjax:send', function () {
+        //         $(".loading").css("display", "block");
+        //     });
+        //
+        //     $(document).on('pjax:complete', function () {
+        //         $(".loading").css("display", "none");
+        //     });
+        // })
+    </script>
+
+    <script type="text/javascript">
+        <!--关于页面-->
+        $('.wechat').popup({
+            popup: $('.wechat-qr'),
+            position: 'bottom center'
+        });
+        $('.qq').popup();
+        $('.github').popup();
+    </script>
+
+
+    <script>
+
+        /*    $('.classify').transition('jiggle');
+            $('.blogDiv').transition('pulse');
+            $('.tagDiv').transition('tada');
+            $('.recommendDiv').transition('tada');*/
+    </script>
+    <!--代码雨效果-->
+    <script>
+        const width = document.getElementById("myCanvas").width = screen.availWidth;
+        const height = document.getElementById("myCanvas").height = screen.availHeight;
+        const ctx = document.getElementById("myCanvas").getContext("2d");
+        const arr = Array(Math.ceil(width / 10)).fill(0);
+        const str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+
+        function rain() {
+            ctx.fillStyle = "rgba(0,0,0,0.05)";
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = "#0f0";
+            arr.forEach(function (value, index) {
+                ctx.fillText(str[Math.floor(Math.random() * str.length)], index * 10, value + 10);
+                arr[index] = value >= height || value > 8888 * Math.random() ? 0 : value + 10;
+            });
+        }
+
+        setInterval(rain, 30);
+    </script>
+
+</th:block>
+</body>
+</html>

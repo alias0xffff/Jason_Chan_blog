@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jasonc.blog.mapper.QquserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jasonc.blog.entity.Qquser">
+        <id column="id" property="id" />
+        <result column="avatar" property="avatar" />
+        <result column="cid" property="cid" />
+        <result column="cip" property="cip" />
+        <result column="cname" property="cname" />
+        <result column="gender" property="gender" />
+        <result column="logintime" property="logintime" />
+        <result column="nickname" property="nickname" />
+        <result column="openid" property="openid" />
+        <result column="year" property="year" />
+    </resultMap>
+
+</mapper>

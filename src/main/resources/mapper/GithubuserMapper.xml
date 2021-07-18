@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jasonc.blog.mapper.GithubuserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jasonc.blog.entity.GithubUser">
+        <id column="id" property="id" />
+        <result column="avatar" property="avatar" />
+        <result column="cid" property="cid" />
+        <result column="cip" property="cip" />
+        <result column="cname" property="cname" />
+        <result column="created_time" property="createdTime" />
+        <result column="github_id" property="githubId" />
+        <result column="index_url" property="indexUrl" />
+        <result column="login_time" property="loginTime" />
+        <result column="nickname" property="nickname" />
+        <result column="node_id" property="nodeId" />
+        <result column="public_repos" property="publicRepos" />
+        <result column="received_events_url" property="receivedEventsUrl" />
+        <result column="subscriptions" property="subscriptions" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+</mapper>

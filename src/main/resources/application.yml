@@ -1,0 +1,25 @@
+spring:
+  #  mvc:
+  #    favicon:
+  #      enabled: false #关闭springBoot默认的网站小叶子图标
+  profiles:
+    active: dev  #指定使用的yml文件
+
+  #    thymeleaf配置
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    excluded-view-names:
+    mode: HTML
+
+  # 国际化
+  messages:
+    encoding: utf-8
+    basename: i18n/messages
+
+
+
